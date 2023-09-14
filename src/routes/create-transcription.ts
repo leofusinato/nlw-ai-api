@@ -21,26 +21,30 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
     const videoPath = video.path;
     const audioReadStream = createReadStream(videoPath);
 
-    const response = await openai.audio.transcriptions.create({
-      file: audioReadStream,
-      model: "whisper-1",
-      language: "pt",
-      response_format: "json",
-      temperature: 0,
-      prompt,
-    });
+    // const response = await openai.audio.transcriptions.create({
+    //   file: audioReadStream,
+    //   model: "whisper-1",
+    //   language: "pt",
+    //   response_format: "json",
+    //   temperature: 0,
+    //   prompt,
+    // });
 
-    const transcript = response.text;
+    // const transcript = response.text;
+    const transcription =
+      "Na aula de hoje mostrarei como aplicar os principios de SOLID com clean architecture, não esquecendo também de aplicar testes com a metodologia TDD. Tudo isso e mais um pouco você aprenderá no video de hoje! Segue a vinheta!";
 
     await prisma.video.update({
       where: {
         id: videoId,
       },
       data: {
-        transcript,
+        transcript: transcription,
       },
     });
 
-    return { transcript };
+    return {
+      transcription,
+    };
   });
 }
